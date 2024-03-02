@@ -1,0 +1,21 @@
+NAME
+	sc - shortcut command
+
+SYNOPSIS
+	sc [-hnp] [shortcut name]
+
+DESCRIPTION
+	sc is a shortcut command that allows you to quickly move to specific folders.
+
+COMMAND-LINE OPTIONS
+	-h --help
+		Display a help message.
+	
+	-n --newshortcut
+		Create a new shortcut.
+	
+	-p --print
+		print the shortcuts and directory locations.
+
+	-d --delete
+		deletes a shortcut via a prompt

@@ -1,0 +1,69 @@
+#!/bin/bash
+
+search() {
+	a=".*$1.*[[:space:]]"
+
+	# search for the shortcut in the data file
+	find="$(grep $a /home/max/Documents/datafiles/sc/shortcutData)"
+
+	# then we replace the prefix before the delimiter " "
+	dirpath="${find##* }"
+
+	cd "$dirpath"
+}
+
+newshortcut() {
+	# checks to see if a name is given for the new shortcut
+	if [[ -z "$1" ]]; then
+		echo "What is the shortcut name?"
+		read shortcutname
+	else
+		shortcutname="$1"
+	fi
+
+	echo "Confirm creating shortcut $shortcutname to current directory $PWD? (y/n)"
+	read yn
+
+	
+	# creates the shortcut
+	if [[ $yn == "y" ]]; then
+		echo "$shortcutname $PWD" >> /home/max/Documents/datafiles/sc/shortcutData && echo "created shortcut"
+	elif [[ $yn == "n" ]]; then
+		echo "shortcut cancelled"
+	else
+		echo "Not a valid response. shortcut cancelled."
+	fi
+}
+
+deleteshortcut() {
+	if [[ -z "$1" ]]; then
+		echo "Here is the list of shortcuts:"
+		cat /home/max/Documents/datafiles/sc/shortcutData
+		echo
+
+		echo "What is the shortcut name?"
+		read shortcutname
+	else
+		shortcutname="$1"
+	fi
+		
+	# deletes a line with the given shortcutname
+	sed -i "/$shortcutname /d" /home/max/Documents/datafiles/sc/shortcutData
+	echo "Deletion successful"
+}
+
+
+
+# processes arguments
+case "$1" in
+	-h) cat /home/max/Documents/datafiles/sc/shortcuthelp ;;
+	--help) cat /home/max/Documents/datafiles/sc/shortcuthelp ;;
+	-n) newshortcut "$2" ;;
+	--newshortcut) newshortcut "$2" ;;
+	-p) cat /home/max/Documents/datafiles/sc/shortcutData ;;
+	--print) cat /home/max/Documents/datafiles/sc/shortcutData ;;
+	-d) deleteshortcut "$2" ;;
+	--delete) deleteshortcut "$2" ;;
+	*) search "$1" ;;
+esac
+
